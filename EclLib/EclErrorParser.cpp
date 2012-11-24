@@ -53,7 +53,6 @@ struct ecl_parser : public boost::spirit::classic::grammar<ecl_parser, ecl_closu
 			first =
 				(
 				def_string	= location_str >> confix_p('(', row_col, ')') >> ':' >> type_str >> alpha_p >> code_num >> ":" >> message_str,
-
 				location_str = identifier2 [ASSIGNSTR(location, arg1, arg2)],
 
 				row_col		= row_num >> ',' >> col_num,

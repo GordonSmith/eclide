@@ -28,7 +28,7 @@
 #undef max
 #endif
 #include <boost/progress.hpp>
-#define BOOST_FILESYSTEM_VERSION 2
+#define BOOST_FILESYSTEM_VERSION 3
 #include <boost/filesystem.hpp>
 #include <boost/format.hpp> 
 #include <boost/bind.hpp>
@@ -74,10 +74,6 @@ namespace boost
 	{
 		#define xml__toarchive xml_woarchive
 		#define xml__tiarchive xml_wiarchive
-	}
-	namespace filesystem
-	{
-		#define _tpath wpath;
 	}
 #else
 	typedef tokenizer<boost::char_separator<char>, std::string::const_iterator, std::string> ntokenizer;

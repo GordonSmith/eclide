@@ -5,8 +5,6 @@
 #include "IPictureHelper.h"
 #include "xmlanbserializer.h"
 
-using namespace boost::tuples;
-
 CXmlAnbDeserializer::CXmlAnbDeserializer(CGraphViewCanvas* view, CCanvas * canvas, const CPoint& relativeLoadPos, int version) : m_view(view), m_canvas(canvas), m_itemAdded(false), m_relativeLoadPos(relativeLoadPos), m_propertyMetaInFile(false), m_version(version)
 {
 }
@@ -768,7 +766,7 @@ const TCHAR* CXmlAnbSerializer::Save(std::_tstring & retVal, SGV::XML_SAVE_FORMA
 		m_pContentHandler->startElement(OLESTR(""), 0, OLESTR(""), 0, L"PluginCollection", wcslen(L"PluginCollection"), m_pSAXAttrs);
 
 		// iterate through all meta data and get the plugin names
-		for (tie(item, end) = m_view->GetMeta().GetIterator(); item != end; ++item) {
+		for (boost::tuples::tie(item, end) = m_view->GetMeta().GetIterator(); item != end; ++item) {
 			if ((item->first.get<0>()) == META_CATEGORY && (item->first.get<1>()) == PLUGIN_NAME) {
 				CCategory cat = (item->first.get<2>());
 				SavePlugin(cat.GetPlugin(), bstr_t(item->second));
@@ -785,7 +783,7 @@ const TCHAR* CXmlAnbSerializer::Save(std::_tstring & retVal, SGV::XML_SAVE_FORMA
 	//TODO check if this iterator will ever return both vertices and subgraphs
 	// iterate through all meta data and get the vertex and subgraph xml categories
 
-	for (tie(item, end) = m_view->GetMeta().GetIterator(); item != end; ++item) 
+	for (boost::tuples::tie(item, end) = m_view->GetMeta().GetIterator(); item != end; ++item) 
 	{
 		if((item->first.get<1>()) == XML_ANBICONFILE) 
 		{
@@ -805,7 +803,7 @@ const TCHAR* CXmlAnbSerializer::Save(std::_tstring & retVal, SGV::XML_SAVE_FORMA
 	m_pContentHandler->startElement(OLESTR(""), 0, OLESTR(""), 0, L"LinkTypeCollection", wcslen(L"LinkTypeCollection"), m_pSAXAttrs);
 
 	// iterate through all meta data and get the edge xml categories
-	for (tie(item, end) = m_view->GetMeta().GetIterator(); item != end; ++item) {
+	for (boost::tuples::tie(item, end) = m_view->GetMeta().GetIterator(); item != end; ++item) {
 		if ((item->first.get<0>()) == META_EDGE && (item->first.get<1>()) == XML_CATEGORY_CODE) {
 			CCategory cat = (item->first.get<2>());
 			SaveLinkType(cat, relavintSpecific);

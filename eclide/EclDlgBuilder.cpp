@@ -580,7 +580,7 @@ void CBuilderDlg::OnLocateFileInExplorer(UINT /*uNotifyCode*/, int /*nID*/, HWND
 {
 	boost::filesystem::wpath file = m_path;
 	boost::filesystem::wpath folder = file.parent_path();
-	::ShellExecute(m_hWnd, _T("open"), _T(""), _T(""), folder.native_directory_string().c_str(), SW_SHOWNORMAL);
+	::ShellExecute(m_hWnd, _T("open"), _T(""), _T(""), folder.native().c_str(), SW_SHOWNORMAL);
 }
 
 void CBuilderDlg::OnEclGoto(UINT /*uNotifyCode*/, int /*nID*/, HWND /*hWnd*/)

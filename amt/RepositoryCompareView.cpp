@@ -142,10 +142,10 @@ void thread_GetWorkspaces(IRepository * rep, IWorkspaceVector * workspaces)
 {
 	boost::filesystem::path envFolder;
 	rep->GetEnvironmentFolder(envFolder);
-	LogMsg((boost::_tformat(_T("thread_GetWorkspaces - %1% - Start")) % envFolder.native_file_string().c_str()).str());
+	LogMsg((boost::_tformat(_T("thread_GetWorkspaces - %1% - Start")) % envFolder.native()).str());
 	ATLASSERT(workspaces->size() == 0);
 	rep->GetWorkspaces(workspaces, true);
-	LogMsg((boost::_tformat(_T("thread_GetWorkspaces - %1% - End")) % envFolder.native_file_string().c_str()).str());
+	LogMsg((boost::_tformat(_T("thread_GetWorkspaces - %1% - End")) % envFolder.native()).str());
 }
 
 void thread_GetModules(IRepository * rep, std::_tstring parentLabel, IModuleVector * modules, bool checksum, bool noRefresh)

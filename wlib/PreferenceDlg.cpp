@@ -702,7 +702,7 @@ public:
 			boost::filesystem::wpath eclccPath = hpccbin;
 			eclccPath /= _T("eclcc.exe");
 			if (boost::filesystem::exists(eclccPath))
-				m_Location = eclccPath.native_file_string().c_str();
+				m_Location = eclccPath.native().c_str();
 		}
 
 		const TCHAR * hpccEcl = _tgetenv(_T("HPCCECL"));
@@ -711,20 +711,20 @@ public:
 			boost::filesystem::wpath wuFolder = hpccEcl;
 			wuFolder /= _T("wu");
 			boost::filesystem::create_directories(wuFolder);
-			m_EclWorkingFolder = wuFolder.native_file_string().c_str();
+			m_EclWorkingFolder = wuFolder.native().c_str();
 
 			m_listFolders.ResetContent();
 			boost::filesystem::wpath samplesPath = hpccEcl;
 			samplesPath = samplesPath.parent_path();
 			samplesPath /= _T("Samples");
 			if (boost::filesystem::exists(samplesPath))
-				m_listFolders.AddString(samplesPath.native_file_string().c_str());
+				m_listFolders.AddString(samplesPath.native().c_str());
 
 			boost::filesystem::wpath repositoryPath = hpccEcl;
 			repositoryPath = repositoryPath .parent_path();
 			repositoryPath /= _T("My Files");
 			boost::filesystem::create_directories(repositoryPath);
-			m_listFolders.AddString(repositoryPath.native_file_string().c_str());
+			m_listFolders.AddString(repositoryPath.native().c_str());
 		}
 		DoDataExchange();
 		SaveToConfig();
@@ -1981,7 +1981,7 @@ public:
 	{
 		boost::filesystem::path path;
 		GetApplicationFolder(path);
-		std::_tstring native_path = CA2T(path.native_file_string().c_str());
+		std::_tstring native_path = path.native();
 		::ShellExecute(m_hWnd, _T("open"), native_path.c_str(), _T(""), native_path.c_str(), SW_SHOW);
 		return 0;
 	}

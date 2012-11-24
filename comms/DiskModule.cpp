@@ -312,8 +312,8 @@ public:
 		m_repository = const_cast<IRepository *>(rep);
 		m_parent = const_cast<IModule *>(parent);
 		m_path = path;
-		m_pathStr = path.native_file_string().c_str();
-		m_url = path.native_file_string().c_str();
+		m_pathStr = path.native();
+		m_url = path.native().c_str();
 		m_id = m_url;
 		m_id += _T("/") + m_qualifiedLabel;
 		m_id.MakeLower();
@@ -470,14 +470,14 @@ public:
 		if (!boost::filesystem::exists(m_path))
 			return false;
 
-		boost::filesystem::wdirectory_iterator end_itr;
-		for (boost::filesystem::wdirectory_iterator itr(m_path); itr != end_itr; ++itr)
+		boost::filesystem::directory_iterator end_itr;
+		for (boost::filesystem::directory_iterator itr(m_path); itr != end_itr; ++itr)
 		{
 			if (boost::filesystem::is_directory(*itr))
 				return true;
 			else
 			{
-				std::_tstring type = boost::filesystem::extension(*itr).c_str();
+				std::_tstring type = CA2T(boost::filesystem::extension(*itr).c_str());
 				if (IsValidExtension(type))
 					return true;
 			}

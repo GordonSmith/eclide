@@ -402,16 +402,22 @@ void LeeRoutePlannerImpl::FindShortestPath(
 	grid_vertex_descriptor_vector &result)
 {
 	grid_vertex_descriptor_vector p(num_vertices(m_graph));
-	std::vector<int> d(num_vertices(m_graph));
+	//std::vector<const int> d(num_vertices(m_graph));
 
 	result.clear();
 
 	try
 	{
+		/*
 		dijkstra_shortest_paths(
 			m_graph, 
 			from,
 			boost::predecessor_map(&p[0]).distance_map(&d[0]).visitor(target_visit(to,boost::on_discover_vertex())));	
+		*/
+		dijkstra_shortest_paths(
+			m_graph, 
+			from,
+			boost::predecessor_map(&p[0]).visitor(target_visit(to,boost::on_discover_vertex())));	
 	}
 	catch (ex_target_found& ex)
 	{
