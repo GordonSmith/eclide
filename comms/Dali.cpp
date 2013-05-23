@@ -11,6 +11,7 @@
 #include "utilDateTime.h"
 #include "EclCC.h"
 #include "LocalWorkunit.h"
+#include <UtilFilesystem.h>
 
 const SectionLabelDefault GLOBAL_SERVER_WORKUNIT(SectionLabel(_T("Server"), _T("Workunit")), _T(""));
 const SectionLabelDefault GLOBAL_CLUSTER(SectionLabel(_T("Server"), _T("Cluster")), _T("thor"));
@@ -944,11 +945,11 @@ protected:
 		CComPtr<IEclCC> eclcc = CreateIEclCC();
 		if (eclcc)
 		{
-			boost::filesystem::wpath path = eclcc->GetWorkingFolder();
+			boost::filesystem::path path = stringToPath(eclcc->GetWorkingFolder());
 			if (boost::filesystem::exists(path))
 			{
-				boost::filesystem::wdirectory_iterator attr_itr_end;
-				for (boost::filesystem::wdirectory_iterator attr_itr(path); attr_itr != attr_itr_end; ++attr_itr)
+				boost::filesystem::directory_iterator attr_itr_end;
+				for (boost::filesystem::directory_iterator attr_itr(path); attr_itr != attr_itr_end; ++attr_itr)
 				{
 					if (!boost::filesystem::is_directory(*attr_itr))
 					{  
@@ -962,8 +963,8 @@ protected:
 						boost::algorithm::replace_all(toWU, _T("T"), _T("-"));
 						boost::algorithm::replace_all(toWU, _T("Z"), _T(""));
 						toWU = _T("L") + toWU;
-						std::_tstring basename = boost::filesystem::basename(*attr_itr).c_str();
-						std::_tstring extension = boost::filesystem::extension(*attr_itr).c_str();
+						std::_tstring basename = CA2T(boost::filesystem::basename(*attr_itr).c_str());
+						std::_tstring extension = CA2T(boost::filesystem::extension(*attr_itr).c_str());
 						if (boost::algorithm::iequals(extension, _T(".exe")))
 						{
 							if (wuid.IsEmpty() || boost::algorithm::iequals(basename, (const TCHAR *)wuid))
@@ -1302,7 +1303,7 @@ protected:
 					if (!path.IsEmpty())
 					{
 						boost::filesystem::wpath p = path;
-						request.Jobname = stringPool.Create(p.stem());
+						request.Jobname = stringPool.Create(pathToWString(p.stem()));
 					}
 
 					CStructPool<ns6__DebugValue> debugValuePool;
@@ -1515,7 +1516,7 @@ protected:
 					return true;
 			} catch (const boost::filesystem::filesystem_error & ex) {
 				_DBGLOG(LEVEL_WARNING, ex.what());
-				_DBGLOG(LEVEL_WARNING, file.native_file_string().c_str());
+				_DBGLOG(LEVEL_WARNING, pathToWString(file).c_str());
 			}
 		}
 		return false;

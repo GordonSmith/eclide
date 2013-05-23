@@ -3,6 +3,7 @@
 #include <Wildcard.h>
 #include "AttributeType.h"
 #include "cache.h"
+#include <UtilFilesystem.h>
 
 //  ===========================================================================
 #define ATTRIBUTE_TYPE_ECL _T("ecl")
@@ -146,5 +147,5 @@ bool IsValidExtension(const std::_tstring & ext)
 }
 COMMS_API bool HasValidExtension(const std::_tstring & filename)
 {
-	return IsValidExtension(boost::filesystem::extension(filename));
+	return IsValidExtension(pathToWString(boost::filesystem::extension(filename)));
 }

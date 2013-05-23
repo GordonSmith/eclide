@@ -4,6 +4,7 @@
 #include "repository.h"
 #include "cmdProcess.h"
 #include "SaltErrorParser.h"
+#include <UtilFilesystem.h>
 
 class CAttributeBase : public clib::CLockableUnknown
 {
@@ -89,7 +90,7 @@ public:
 			std::_tstring in;
 			std::_tstring out;
 			std::_tstring err;
-			int result = runProcess(cmd, (const TCHAR *)CA2T(folder.native_file_string().c_str()), _T(""), in, out, err);
+			int result = runProcess(cmd, pathToWString(folder), _T(""), in, out, err);
 			inputFile.HandsOn();
 
 			CComPtr<IRepository> rep = AttachModFileRepository(outputFile.TempFileName(), false);
