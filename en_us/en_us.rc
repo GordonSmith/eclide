@@ -1,7 +1,6 @@
 // Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
-#include "../config.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -29,8 +28,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION HPCC_MAJOR, HPCC_MINOR, HPCC_POINT, HPCC_BUILD
- PRODUCTVERSION HPCC_MAJOR, HPCC_MINOR, HPCC_POINT, HPCC_BUILD
+ FILEVERSION 4,0,2,0
+ PRODUCTVERSION 4,0,2,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -47,12 +46,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "HPCC Systems"
             VALUE "FileDescription", "en_us Module"
-            VALUE "FileVersion",  HPCC_VERSION
+            VALUE "FileVersion", "4.0.2.000"
             VALUE "InternalName", "en_us"
             VALUE "LegalCopyright", "HPCC Systems, Copyright 2013, All rights reserved."
             VALUE "OriginalFilename", "en_us.dll"
             VALUE "ProductName", "AMT Module"
-            VALUE "ProductVersion", HPCC_VERSION
+            VALUE "ProductVersion", "4.0.2.000"
         END
     END
     BLOCK "VarFileInfo"
@@ -1420,6 +1419,21 @@ BEGIN
         MENUITEM "Step Graph End",              ID_DEBUGGER_STEPGRAPHEND
         MENUITEM "Socket Progress",             ID_DEBUGGER_SOCKETPROGRESS
         MENUITEM "Layout Progress",             ID_DEBUGGER_LAYOUTPROGRESS
+        MENUITEM SEPARATOR
+        POPUP "Active"
+        BEGIN
+            MENUITEM "Running Only",                ID_VIEW_RUNNINGONLYACTIVE
+            MENUITEM "Found Only",                  ID_VIEW_FOUNDONLYACTIVE
+        END
+        POPUP "Global"
+        BEGIN
+            MENUITEM "Running Only",                ID_VIEW_RUNNINGONLYGLOBAL
+            MENUITEM "Found Only",                  ID_VIEW_FOUNDONLYGLOBAL
+        END
+        POPUP "Other"
+        BEGIN
+            MENUITEM "Auto Show Data",              ID_OTHER_AUTOSHOWDATA
+        END
     END
     POPUP "View"
     BEGIN
@@ -1444,17 +1458,6 @@ BEGIN
             MENUITEM "Style 3D",                    ID_VIEW_TABLOOK_STYLE_3D
             MENUITEM "Style 3D Rounded Scroll",     ID_VIEW_TABLOOK_STYLE_3D_ROUNDED_SCROLL
             MENUITEM "Style Close On Tab",          ID_VIEW_TABLOOK_STYLE_CLOSE_ON_TAB
-        END
-        MENUITEM SEPARATOR
-        POPUP "Active"
-        BEGIN
-            MENUITEM "Running Only",                ID_VIEW_RUNNINGONLYACTIVE
-            MENUITEM "Found Only",                  ID_VIEW_FOUNDONLYACTIVE
-        END
-        POPUP "Global"
-        BEGIN
-            MENUITEM "Running Only",                ID_VIEW_RUNNINGONLYGLOBAL
-            MENUITEM "Found Only",                  ID_VIEW_FOUNDONLYGLOBAL
         END
         MENUITEM SEPARATOR
         MENUITEM "Caption Bar",                 33211

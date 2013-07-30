@@ -179,6 +179,12 @@ bool CDebugView::UpdateUI(CCmdUI * cui)
 			cui->SetCheck(m_frmActiveGraph.m_viewFoundOnly);
 			return true;
 		}
+		if (cui->m_nID == ID_OTHER_AUTOSHOWDATA)
+		{
+			cui->Enable(active);
+			cui->SetCheck(m_frmActiveGraph.m_otherAutoShowData);
+			return true;
+		}
 		UPDATEUI(cui, IDC_BUTTON_SEARCH, paused);
 		UPDATEUI(cui, IDC_BUTTON_CLEARSEARCH, paused);
 		if (!active && m_wu->IsDebugging())
@@ -336,7 +342,10 @@ const CUniqueID & CDebugView::GetCurrentID()
 void CDebugView::NewSelection(const CDebugGraphView * from, const CUniqueID & newSel, bool recenterGraph, bool forceDataLoad, bool dontShowDefinition)
 {
 	if (m_debugSession->GetCurrentID() != newSel)
+	{
 		GetIMainFrame()->m_debugDataViews->ClearTabData();
+		GetIMainFrame()->m_debugDataViews->ClearTabECL();
+	}
 	m_debugSession->SetSelected(newSel, forceDataLoad);
 
 	Element::StringStringMap active, global;
@@ -1070,6 +1079,14 @@ void CDebugView::OnViewActiveFoundonly(UINT uNotifyCode, int nID, CWindow wndCtl
 	{
 		activeWnd->m_viewFoundOnly = !activeWnd->m_viewFoundOnly;
 		activeWnd->CalcVisibilityAndLayout(m_debugSession->GetActiveID());
+	}
+}
+
+void CDebugView::OnOtherAutoShowData(UINT uNotifyCode, int nID, CWindow wndCtl)
+{
+	if (CDebugGraphView * activeWnd = &m_frmActiveGraph)
+	{
+		activeWnd->m_otherAutoShowData = !activeWnd->m_otherAutoShowData;
 	}
 }
 

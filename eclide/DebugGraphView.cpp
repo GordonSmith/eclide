@@ -45,6 +45,7 @@ CDebugGraphView::CDebugGraphView()
 	m_passthroughVertices = false;
 	m_viewRunningOnly = false;
 	m_viewFoundOnly = false;
+	m_otherAutoShowData = true;
 	m_viewGlobal = NULL;
 }
 

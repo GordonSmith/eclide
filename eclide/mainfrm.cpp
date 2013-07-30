@@ -1402,6 +1402,8 @@ void CMainFrame::InitializeRibbon()
 		CMFCRibbonPanel* pPanelActiveFilter = m_CategoryDebugAdvanced->AddPanel(_T("Active Filter"), m_PanelImages.ExtractIcon (7));
 		pPanelActiveFilter->Add(new CMFCRibbonCheckBox(ID_VIEW_RUNNINGONLYACTIVE, _T("Running Only\nr")));
 		pPanelActiveFilter->Add(new CMFCRibbonCheckBox(ID_VIEW_FOUNDONLYACTIVE, _T("Search Results Only\nf")));
+		CMFCRibbonPanel* pPanelOther = m_CategoryDebugAdvanced->AddPanel(_T("Other"), m_PanelImages.ExtractIcon (7));
+		pPanelOther->Add(new CMFCRibbonCheckBox(ID_OTHER_AUTOSHOWDATA, _T("Auto Switch Info View\na")));
 	}
 
 	{//  Diff Ribbon

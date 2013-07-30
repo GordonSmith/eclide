@@ -158,6 +158,7 @@ public:
 		COMMAND_ID_HANDLER_EX(ID_VIEW_FOUNDONLYGLOBAL, OnViewGlobalFoundonly)
 		COMMAND_ID_HANDLER_EX(ID_VIEW_RUNNINGONLYACTIVE, OnViewActiveRunningonly)
 		COMMAND_ID_HANDLER_EX(ID_VIEW_FOUNDONLYACTIVE, OnViewActiveFoundonly)
+		COMMAND_ID_HANDLER_EX(ID_OTHER_AUTOSHOWDATA, OnOtherAutoShowData)		
 
 		COMMAND_ID_HANDLER_EX(IDC_BUTTON_SEARCH, OnBnClickedSearch)
 		COMMAND_ID_HANDLER_EX(IDC_BUTTON_CLEARSEARCH, OnBnClickedClearSearch)
@@ -215,6 +216,7 @@ public:
 	void OnViewGlobalFoundonly(UINT uNotifyCode, int nID, CWindow wndCtl);
 	void OnViewActiveRunningonly(UINT uNotifyCode, int nID, CWindow wndCtl);
 	void OnViewActiveFoundonly(UINT uNotifyCode, int nID, CWindow wndCtl);
+	void OnOtherAutoShowData(UINT uNotifyCode, int nID, CWindow wndCtl);
 	void OnBnClickedSearch(UINT uNotifyCode, int nID, CWindow wndCtl);
 	void OnBnClickedClearSearch(UINT uNotifyCode, int nID, CWindow wndCtl);
 	//CTabPane

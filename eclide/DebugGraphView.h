@@ -84,6 +84,7 @@ public:
 
 	bool m_viewRunningOnly;
 	bool m_viewFoundOnly;
+	bool m_otherAutoShowData;
 
 	// Operations
 public:

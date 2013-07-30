@@ -29,6 +29,7 @@ void CDockableDataViews::SetOwner(IGraphViewSlot * owner)
 
 void CDockableDataViews::ActivateTab(const CWnd * wnd)
 {
+	// GJS TODO ID_OTHER_AUTOSHOWDATA
 	int tabID = m_wndTab.GetTabFromHwnd(wnd->GetSafeHwnd());
 	if (tabID >= 0)
 		m_wndTab.SetActiveTab(tabID);
@@ -55,6 +56,14 @@ void CDockableDataViews::SetTabData(const std::_tstring & label, const ITable * 
 	}
 	m_dataTabs[label]->SetData(data, hasRowNum, searchResults);
 	ActivateTab(m_dataTabs[label]);
+}
+
+void CDockableDataViews::ClearTabData()
+{
+	for (StringResultMap::iterator itr = m_dataTabs.begin(); itr != m_dataTabs.end(); ++itr)
+	{
+		itr->second->SetData(NULL, false, roxie::CSearchRowVector());
+	}
 }
 
 void CDockableDataViews::PrepTabEcl(const SGV::CGraphViewCtrl & graphView, Dali::IWorkunit * wu)
@@ -142,13 +151,12 @@ void CDockableDataViews::SetTabEcl(const std::_tstring & localFile, int row, con
 	m_sourceTabs[localFile]->SetBreakpointLocation(row, id);
 }
 
-void CDockableDataViews::ClearTabData()
+void CDockableDataViews::ClearTabECL()
 {
-	for (StringResultMap::iterator itr = m_dataTabs.begin(); itr != m_dataTabs.end(); ++itr)
+	for (StringSourceMap::iterator itr = m_sourceTabs.begin(); itr != m_sourceTabs.end(); ++itr)
 	{
-		itr->second->SetData(NULL, false, roxie::CSearchRowVector());
+		itr->second->SetText(_T(""));
 	}
-	SetTabSelection(_T("Data"), roxie::CSearchRowVector());
 }
 
 void CDockableDataViews::SetTabSelection(const std::_tstring & label, const roxie::CSearchRowVector & searchResults)

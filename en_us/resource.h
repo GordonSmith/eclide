@@ -2,6 +2,10 @@
 // Microsoft Visual C++ generated include file.
 // Used by en_us.rc
 //
+#define HPCC_MINOR                      0
+#define HPCC_BUILD                      000
+#define HPCC_POINT                      2
+#define HPCC_MAJOR                      4
 #define IDC_BUTTON_REPLACE              12
 #define IDC_BUTTON_CHECKSYNTAX          13
 #define IDC_BUTTON_REPLACE_ALL          14
@@ -844,6 +848,8 @@
 #define ID_SYNTAX_COPYALL               33084
 #define ID_EDIT_COPYALL                 33085
 #define ID_SYNTAX_LOCATEERROR           33086
+#define ID_DEBUGGER_OTHER               33087
+#define ID_OTHER_AUTOSHOWDATA           33088
 #define ATL_IDS_IDLEMESSAGE             0xE001
 #define ATL_IDS_SCSIZE                  0xEF00
 #define ATL_IDS_SCMOVE                  0xEF01
@@ -872,7 +878,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        61413
-#define _APS_NEXT_COMMAND_VALUE         33087
+#define _APS_NEXT_COMMAND_VALUE         33089
 #define _APS_NEXT_CONTROL_VALUE         528
 #define _APS_NEXT_SYMED_VALUE           61503
 #endif
