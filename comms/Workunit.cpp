@@ -911,7 +911,6 @@ public:
 				SAFE_ASSIGN(gt->m_name, TimingData->ECLTimingData[i]->Name);
 				SAFE_ASSIGN(gt->m_graphNum, TimingData->ECLTimingData[i]->GraphNum);
 				SAFE_ASSIGN(gt->m_subGraphNum, TimingData->ECLTimingData[i]->SubGraphNum);
-				SAFE_ASSIGN(gt->m_gid, TimingData->ECLTimingData[i]->GID);
 				SAFE_ASSIGN(gt->m_minutes, TimingData->ECLTimingData[i]->Min);
 				SAFE_ASSIGN(gt->m_milliseconds, TimingData->ECLTimingData[i]->MS);
 				m_graphTimings.push_back(gt);

@@ -194,7 +194,7 @@ void buildList3Timings(WTL::CSortListViewCtrl & list, const Dali::IGraph * graph
 	{
 		if (graph->GetSequence() == itr->get()->m_graphNum)
 		{
-			list.InsertItem(row, boost::lexical_cast<std::_tstring>(itr->get()->m_gid).c_str());
+			list.InsertItem(row, boost::lexical_cast<std::_tstring>(itr->get()->m_subGraphNum).c_str());
 			list.SetItemText(row, 1, boost::lexical_cast<std::_tstring>(itr->get()->m_minutes).c_str());
 			list.SetItemText(row, 2, boost::lexical_cast<std::_tstring>(itr->get()->m_milliseconds).c_str());
 			list.SetItemData(row, (DWORD_PTR)itr->get());
@@ -288,7 +288,7 @@ void CGraphView3::CenterOnItem(const CUniqueID & id)
 
 void CGraphView3::CenterOnTiming(const Dali::CGraphTiming * timing)
 {
-	CUniqueID id(guidDefault, XGMML_CAT_SUBGRAPH, boost::lexical_cast<std::_tstring>(timing->m_gid));
+	CUniqueID id(guidDefault, XGMML_CAT_SUBGRAPH, boost::lexical_cast<std::_tstring>(timing->m_subGraphNum));
 	CenterOnItem(id);
 }
 
@@ -620,8 +620,8 @@ LRESULT CGraphView3::OnGraphUpdate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam
 					if (m_listTimings.GetItemCount() > 0)
 					{
 						Dali::CGraphTiming * timing = (Dali::CGraphTiming *)m_listTimings.GetItemData(m_listTimings.GetItemCount() - 1);
-						std::_tstring gid = boost::lexical_cast<std::_tstring>(timing->m_gid);
-						subgraphID = CUniqueID(guidDefault, XGMML_CAT_SUBGRAPH, gid);
+						std::_tstring subGraphNum = boost::lexical_cast<std::_tstring>(timing->m_subGraphNum);
+						subgraphID = CUniqueID(guidDefault, XGMML_CAT_SUBGRAPH, subGraphNum);
 					}
 				}
 				needsLayout = m_wndLNGVC.EnsureVisible(subgraphID);
@@ -644,7 +644,7 @@ LRESULT CGraphView3::OnGraphUpdate(UINT /*uMsg*/, WPARAM wParam, LPARAM /*lParam
 					if (m_listTimings.GetItemCount() > 0)
 					{
 						Dali::CGraphTiming * timing = (Dali::CGraphTiming *)m_listTimings.GetItemData(m_listTimings.GetItemCount() - 1);
-						subgraphID = CUniqueID(guidDefault, XGMML_CAT_SUBGRAPH, boost::lexical_cast<std::_tstring>(timing->m_gid));
+						subgraphID = CUniqueID(guidDefault, XGMML_CAT_SUBGRAPH, boost::lexical_cast<std::_tstring>(timing->m_subGraphNum));
 					}
 				}
 				m_wndLNGVC.EnsureVisible(subgraphID);

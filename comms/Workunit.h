@@ -74,7 +74,6 @@ public:
 	std::_tstring m_name;
 	int m_graphNum;
 	int m_subGraphNum;
-    int m_gid;
     int m_minutes;
     int m_milliseconds;
 
