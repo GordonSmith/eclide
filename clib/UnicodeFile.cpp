@@ -64,6 +64,7 @@ bool CUnicodeFile::Create(int readWriteMode, int createMode, ENCODING encoding)
 			m_file.Write(bom, 3, &bytesWritten);
 			ATLASSERT(bytesWritten == 3);
 			break;
+		case ENCODING_UTF_8_NOBOM:
 		case ENCODING_ANSI:
 		default:
 			break;
@@ -102,7 +103,7 @@ bool CUnicodeFile::Open(const TCHAR * filePath, int readWriteMode)
 		else
 		{
 			m_file.Seek(0, FILE_BEGIN);
-			m_encoding = ENCODING_ANSI;
+			m_encoding = ENCODING_UTF_8_NOBOM;
 		}
 		return true;
 	}
@@ -134,6 +135,7 @@ void CUnicodeFile::Write(const TCHAR* data)
 		convertedWideData = CT2W(data);
 		break;
 	case ENCODING_UTF_8:
+	case ENCODING_UTF_8_NOBOM:
 		convertedData = CT2A(data, CP_UTF8);
 		break;
 	case ENCODING_ANSI:
@@ -206,6 +208,7 @@ bool CUnicodeFile::Read(std::_tstring & data)
 			data = CW2T(rawWideData.c_str());
 			break;
 		case ENCODING_UTF_8:
+		case ENCODING_UTF_8_NOBOM:
 			data = CA2T(rawData.c_str(), CP_UTF8);
 			break;
 		case ENCODING_ANSI:
