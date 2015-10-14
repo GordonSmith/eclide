@@ -9,6 +9,7 @@
 #include "RecursiveMutex.h"
 #include "PreferenceDlg.h"
 #include <EclCC.h>
+#include <ShellContextMenu.h>  //wlib
 
 struct ContextState
 {
@@ -53,6 +54,68 @@ public:
     void OnDoubleClick(IAttributeHistory & attrHistory, Dali::CEclExceptionVector * errors) 
     {
         GetIMainFrame()->OpenSyntaxAttribute(attrHistory.GetAttribute(), errors);
+    }
+
+    void OnFileContext()
+    {
+        if (!s.attrs.empty()) {
+            CComQIPtr<IDiskAttribute> dattr = s.attrs[0].get();
+            if (dattr) {
+                CMenu * pMenu = NULL;
+                CShellContextMenu contextMenu;
+                contextMenu.SetObjects(dattr->GetPath());
+                contextMenu.ShowContextMenu(phWnd, pt);
+                /*
+                pMenu = scm.GetMenu();
+                CMenu * pMenuView = GetParent()->GetMenu()->GetSubMenu(1);	// Menu 'View'
+                pMenu->AppendMenu(MF_BYPOSITION | MF_POPUP, (UINT)pMenuView->m_hMenu, TEXT("Custom Menu"));
+                pMenu->AppendMenu(MF_BYPOSITION, MF_SEPARATOR);
+                for (int i = IDM_VIEW_LARGEICONS; i <= IDM_VIEW_REPORT; i++)
+                {
+                if ((int)GetView() == i)
+                pMenuView->CheckMenuItem(IDM_VIEW_CUSTOMMENU, MF_CHECKED);
+                else
+                pMenuView->CheckMenuItem(IDM_VIEW_CUSTOMMENU, MF_UNCHECKED);
+                }
+                pMenuView->CheckMenuItem(GetView(), MF_CHECKED);
+                }
+
+                CPoint point(nmia->ptAction);
+                m_FileList.ClientToScreen(&point);
+
+                UINT idCommand = scm.ShowContextMenu(this, point);
+                if (bCustomMenu)
+                pMenu->RemoveMenu(0, MF_BYPOSITION);	// that's necessary, because we directly used the 'View' menu and not a copy
+                // therefore CShellContextMenu would delete it
+                if (idCommand)
+                GetParent()->SendMessage(WM_COMMAND, idCommand, 0);
+                */
+                /*
+                WTL::CMenu menu = dattr->GetShellMenu(phWnd, pt);
+                int idCmd = menu.TrackPopupMenu(TPM_LEFTALIGN | TPM_RETURNCMD | TPM_RIGHTBUTTON, pt.x, pt.y, phWnd, NULL);
+
+                if (idCmd != 0)
+                {
+                USES_CONVERSION;
+
+                // Execute the command that was selected.
+                CMINVOKECOMMANDINFO cmi = { 0 };
+                cmi.cbSize = sizeof(CMINVOKECOMMANDINFO);
+                cmi.fMask = 0;
+                cmi.hwnd = phWnd;
+                cmi.lpVerb = T2CA(MAKEINTRESOURCE(idCmd - 1));
+                cmi.lpParameters = NULL;
+                cmi.lpDirectory = NULL;
+                cmi.nShow = SW_SHOWNORMAL;
+                cmi.dwHotKey = 0;
+                cmi.hIcon = NULL;
+                //hr = spContextMenu->InvokeCommand(&cmi);
+                }
+
+                //::DestroyMenu(hMenu);
+                */
+            }
+        }
     }
 
     void OnContext(CRepositorySelections &s, CPoint &pt)

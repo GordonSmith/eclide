@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 
-#include "module.h"
+#include "DiskModule.h"
 #include "DiskRepository.h"
 #include "clib.h"
 #include "cache.h"

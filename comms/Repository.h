@@ -1,7 +1,8 @@
 #pragma once
 
 #include "comms.h"
-#include "module.h"
+#include "DiskModule.h"
+#include "DiskAttribute.h"
 #include "global.h"
 #include "StringSet.h"
 #include "workspace.h"
@@ -141,7 +142,9 @@ struct CRepositorySelections
     IRepositoryVector		reps;
     IModuleVector			plugins;
     IModuleVector			mods;
+    IDiskModuleVector		diskMods;
     IAttributeVector		attrs;
+    IDiskAttributeVector	diskAttrs;
     IAttributeHistoryVector histories;
     //IWorkspaceVector		workspaces;
 

@@ -52,12 +52,18 @@ public:
             {
                 if (modNode->GetModule()->IsPlugin())
                     s.plugins.push_back(modNode->GetModule());
-                else
+                else 
+                {
                     s.mods.push_back(modNode->GetModule());
+                    if (CComQIPtr<IDiskModule> diskModule = reinterpret_cast<IDiskModule*>(modNode->GetModule()))
+                        s.diskMods.push_back(diskModule.p);
+                }
             }
             else if (CComQIPtr<CAttributeNode> attrNode = reinterpret_cast<CTreeNode*>(data))
             {
                 s.attrs.push_back(attrNode->GetAttribute());
+                if (CComQIPtr<IDiskAttribute> diskAttr = reinterpret_cast<IDiskAttribute*>(attrNode->GetAttribute()))
+                    s.diskAttrs.push_back(diskAttr.p);
             }
             else if(CComQIPtr<CAttributeHistoryNode> historyNode = reinterpret_cast<CTreeNode*>(data))
             {
