@@ -46,6 +46,7 @@ __interface IRepositorySlot
     void UpdateModule(IModule *from, IModule *to);
     IRepository * GetRepository(); 
     bool ExpandModule(IModule &mod);
+    bool DoInsertAttribute(CComPtr<IModule> module);
 };
 
 class CRepositorySlotImpl : public IRepositorySlot
@@ -74,6 +75,10 @@ public:
     IRepository * GetRepository()
     {
         return AttachRepository();
+    }
+    bool DoInsertAttribute(CComPtr<IModule> module)
+    {
+        return false;
     }
 };
 

@@ -72,8 +72,10 @@ BOOL CRepositoryView::PreTranslateMessage(MSG* pMsg)
                 item.hItem = m_Tree.GetSelectedItem();
                 if (m_Tree.GetItem(&item))
                 {
-                    CComPtr<CTreeNode> tn = (CTreeNode *)item.lParam;
-                    InsertNewAttribute();
+                    CComQIPtr<CModuleNode> modNode = (CTreeNode *)item.lParam;
+                    if (modNode) {
+                        m_Owner->DoInsertAttribute(modNode->GetModule());
+                    }
                 }
             }
             break;

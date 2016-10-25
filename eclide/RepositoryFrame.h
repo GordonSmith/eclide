@@ -332,6 +332,21 @@ public:
         ::UpdateAttributeMDI(from, to);
     }
 
+    bool DoInsertAttribute(CComPtr<IModule> module)
+    {
+        T * pT = static_cast<T*>(this);
+        CString label;
+        CComPtr<IAttributeType> type;
+        if (GetInsertAttribute(module->GetQualifiedLabel(), label, type, true))
+        {
+            if (pT->m_view.DoInsertAttribute(module, (const TCHAR *)label, type)) {
+                GetIMainFrame()->OpenAttribute(label, type, module->GetQualifiedLabel());
+                return true;
+            }
+        }
+        return false;
+    }
+
     void CalculateContextMenuState(CRepositorySelections &s, ContextState &state)
     {
         bool RemoteRepository = true;
