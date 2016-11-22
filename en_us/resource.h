@@ -872,6 +872,8 @@
 #define ID_MDI_CLOSEALLOTHERS           33099
 #define ID_MDI_CLOSEALLRIGHT            33100
 #define ID_MDI_CLOSEALLLEFT             33101
+#define ID_MINIAPPS                     33102
+#define ID_MINIAPPS_LAST                33199
 #define ATL_IDS_IDLEMESSAGE             0xE001
 #define ATL_IDS_SCSIZE                  0xEF00
 #define ATL_IDS_SCMOVE                  0xEF01
@@ -901,7 +903,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        61414
-#define _APS_NEXT_COMMAND_VALUE         33102
+#define _APS_NEXT_COMMAND_VALUE         33200
 #define _APS_NEXT_CONTROL_VALUE         539
 #define _APS_NEXT_SYMED_VALUE           61503
 #endif

@@ -77,6 +77,8 @@ set ( SRCS
 		meta.h
 		Migration.cpp
 		Migration.h
+		MiniApp.cpp
+		MiniApp.h
 		ModFileAttribute.cpp
 		ModFileAttributeHistory.cpp
 		ModFileModule.cpp

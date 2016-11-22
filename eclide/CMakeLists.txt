@@ -12,6 +12,8 @@ set ( SRCS
 		ChildAttributeFrame.h
 		ChildBuilderFrame.cpp
 		ChildBuilderFrame.h
+		ChildMiniAppFrame.cpp
+		ChildMiniAppFrame.h
 		#ChildEclFrame.cpp
 		#ChildEclFrame.h
 		ChildFrame.cpp

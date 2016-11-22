@@ -37,6 +37,7 @@ public:
     std::_tstring m_attributeType;
     std::_tstring m_builder;
     std::_tstring m_graph;
+    std::_tstring m_miniAppPath;
     std::_tstring m_blankString;
 
 public:
@@ -178,6 +179,12 @@ public:
             if (recalcID)
                 m_id += _T("/") + m_graph;
             m_label = m_graph;
+            break;
+        case WORKSPACE_ITEM_MINIAPP:
+            m_miniAppPath = m_props.Get(PERSIST_PATH);
+            if (recalcID)
+                m_id += _T("/") + m_miniAppPath;
+            m_label = m_miniAppPath;
             break;
         default:
             ATLASSERT(!"Unknown persist type.");
@@ -407,6 +414,10 @@ public:
         {
             return WORKSPACE_ITEM_GRAPH;
         }
+        else if (type.compare(PERSISTVAL_MINIAPP) == 0)
+        {
+            return WORKSPACE_ITEM_MINIAPP;
+        }
         return WORKSPACE_ITEM_UNKNOWN;
     }
 
@@ -420,6 +431,8 @@ public:
             return PERSISTVAL_ATTRIBUTE;
         case WORKSPACE_ITEM_GRAPH:
             return PERSISTVAL_GRAPH;
+        case WORKSPACE_ITEM_MINIAPP:
+            return PERSISTVAL_MINIAPP;
         }
         return _T("");
     }

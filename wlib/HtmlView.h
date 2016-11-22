@@ -34,6 +34,7 @@ public:
     DECLARE_WND_SUPERCLASS(_T("TabBrowser_TabPageWindow"), CAxWindow::GetWndClassName())
     // IDispatch events function info
     static _ATL_FUNC_INFO DocumentComplete2_Info;
+    static _ATL_FUNC_INFO BeforeNavigate2_Info;
     static _ATL_FUNC_INFO Navigate2Complete_Info;
     static _ATL_FUNC_INFO TitleChange_Info;
     static _ATL_FUNC_INFO StatusTextChange_Info;
@@ -81,6 +82,124 @@ public:
         CComVariant vPostData;
         CComVariant vHeaders(extraHeaders);
         return m_spBrowser->Navigate(url, &vFlags, &vTargetFrameName, &vPostData, &vHeaders);
+    }
+
+    bool LoadFromStream(IStream* pStream)
+    {
+        HRESULT hr;
+        IDispatch* pHtmlDoc = NULL;
+        IPersistStreamInit* pPersistStreamInit = NULL;
+
+        CComVariant aboutBlank("about:blank");
+        m_spBrowser->Navigate2(&aboutBlank, NULL, NULL, NULL, NULL);
+        // Retrieve the document object.
+        hr = m_spBrowser->get_Document(&pHtmlDoc);
+        if (SUCCEEDED(hr))
+        {
+            // Query for IPersistStreamInit.
+            hr = pHtmlDoc->QueryInterface(IID_IPersistStreamInit, (void**)&pPersistStreamInit);
+            if (SUCCEEDED(hr))
+            {
+                // Initialize the document.
+                hr = pPersistStreamInit->InitNew();
+                if (SUCCEEDED(hr))
+                {
+                    // Load the contents of the stream.
+                    hr = pPersistStreamInit->Load(pStream);
+                }
+                pPersistStreamInit->Release();
+            }
+            pHtmlDoc->Release();
+            return true;
+        }
+        return false;
+    }
+
+    HRESULT LoadFromString(LPCTSTR pszHTMLContent)
+    {
+        IStream * pStream = NULL;
+        HGLOBAL hHTMLContent;
+        HRESULT hr;
+        bool bResult = false;
+
+        // allocate global memory to copy the HTML content to
+        hHTMLContent = ::GlobalAlloc(GPTR, (::_tcslen(pszHTMLContent) + 1) * sizeof(TCHAR));
+        if (!hHTMLContent)
+            return false;
+
+        ::_tcscpy((TCHAR *)hHTMLContent, pszHTMLContent);
+
+        // create a stream object based on the HTML content
+        hr = ::CreateStreamOnHGlobal(hHTMLContent, TRUE, &pStream);
+        if (SUCCEEDED(hr))
+        {
+            LoadFromStream(pStream);
+
+            // implicitly calls ::GlobalFree to free the global memory
+            pStream->Release();
+        }
+
+        return bResult;
+    }
+
+    bool GetJScript(CComPtr<IDispatch>& spDisp)
+    {
+        IDispatch* spDocument = NULL;
+        HRESULT hr = m_spBrowser->get_Document(&spDocument);
+        ATLASSERT(SUCCEEDED(hr));
+        CComQIPtr<IHTMLDocument2> spHtmlDoc = spDocument;
+        if (spHtmlDoc) {
+            hr = spHtmlDoc->get_Script(&spDisp);
+            ATLASSERT(SUCCEEDED(hr));
+            return SUCCEEDED(hr);
+        }
+        return false;
+    }
+
+
+    bool CallJScript(const CString strFunc, const CStringArray& paramArray, CComVariant* pVarResult)
+    {
+        CComPtr<IDispatch> spScript;
+        if (!GetJScript(spScript))
+            return false;
+
+        CComBSTR bstrMember(strFunc);
+        DISPID dispid = NULL;
+        HRESULT hr = spScript->GetIDsOfNames(IID_NULL, &bstrMember, 1, LOCALE_SYSTEM_DEFAULT, &dispid);
+        if (FAILED(hr))
+            return false;
+
+        const int arraySize = paramArray.GetSize();
+
+        DISPPARAMS dispparams;
+        memset(&dispparams, 0, sizeof dispparams);
+        dispparams.cArgs = arraySize;
+        dispparams.rgvarg = new VARIANT[dispparams.cArgs];
+
+        for (int i = 0; i < arraySize; i++)
+        {
+            CComBSTR bstr = paramArray.GetAt(arraySize - 1 - i); // back reading
+            bstr.CopyTo(&dispparams.rgvarg[i].bstrVal);
+            dispparams.rgvarg[i].vt = VT_BSTR;
+        }
+        dispparams.cNamedArgs = 0;
+
+        EXCEPINFO excepInfo;
+        memset(&excepInfo, 0, sizeof excepInfo);
+        CComVariant vaResult;
+        UINT nArgErr = (UINT)-1;  // initialize to invalid arg
+
+        hr = spScript->Invoke(dispid, IID_NULL, 0, DISPATCH_METHOD, &dispparams, &vaResult, &excepInfo, &nArgErr);
+
+        delete[] dispparams.rgvarg;
+        if (FAILED(hr))
+            return false;
+
+        if (pVarResult)
+        {
+            *pVarResult = vaResult;
+        }
+        return true;
     }
 
     virtual void CreateHTMLControl()
@@ -250,13 +369,14 @@ public:
 // Event map and handlers
     BEGIN_SINK_MAP(CHtmlView)
         SINK_ENTRY_INFO(_nDispatchID, DIID_DWebBrowserEvents2, DISPID_DOCUMENTCOMPLETE, OnEventDocumentComplete, &DocumentComplete2_Info)
+        SINK_ENTRY_INFO(_nDispatchID, DIID_DWebBrowserEvents2, DISPID_BEFORENAVIGATE2, OnEventBeforeNavigate2, &BeforeNavigate2_Info)
         SINK_ENTRY_INFO(_nDispatchID, DIID_DWebBrowserEvents2, DISPID_NAVIGATECOMPLETE2, OnEventNavigate2Complete, &Navigate2Complete_Info)
         SINK_ENTRY_INFO(_nDispatchID, DIID_DWebBrowserEvents2, DISPID_TITLECHANGE, OnEventTitleChange, &TitleChange_Info)
         SINK_ENTRY_INFO(_nDispatchID, DIID_DWebBrowserEvents2, DISPID_STATUSTEXTCHANGE, OnEventStatusTextChange, &StatusTextChange_Info)
         SINK_ENTRY_INFO(_nDispatchID, DIID_DWebBrowserEvents2, DISPID_COMMANDSTATECHANGE, OnEventCommandStateChange, &CommandStateChange_Info)
     END_SINK_MAP()
 
-    void __stdcall OnEventDocumentComplete(IDispatch* /*pDisp*/, VARIANT* URL)
+    virtual void __stdcall OnEventDocumentComplete(IDispatch* /*pDisp*/, VARIANT* URL)
     {
         // Send message to the main frame
         ATLASSERT(V_VT(URL) == VT_BSTR);
@@ -274,6 +394,10 @@ public:
         //		BrowserRefresh();
         //	}
         //}
+    }
+
+    virtual void __stdcall OnEventBeforeNavigate2(IDispatch * pObject, VARIANT * pvarUrl, VARIANT * pvarFlags, VARIANT * pvarTargetFrame, VARIANT * pvarData, VARIANT * pvarHeaders, VARIANT_BOOL * pbCancel)
+    {
     }
 
     void __stdcall OnEventNavigate2Complete(IDispatch* /*pDisp*/, VARIANT* URL)
@@ -303,7 +427,12 @@ public:
             m_bCanGoForward = (Enable != VARIANT_FALSE);
     }
 
-// Message map and handlers
+    bool DoQuerySave()
+    {
+        return true;
+    }
+
+    // Message map and handlers
     BEGIN_MSG_MAP(CBrowserView)
         MESSAGE_HANDLER(WM_CREATE, OnCreate)
         MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
@@ -371,7 +500,8 @@ public:
 };
 
 __declspec(selectany) _ATL_FUNC_INFO CHtmlView::DocumentComplete2_Info = { CC_STDCALL, VT_EMPTY, 2, { VT_DISPATCH, VT_BYREF | VT_VARIANT } };
-__declspec(selectany) _ATL_FUNC_INFO CHtmlView::Navigate2Complete_Info = { CC_STDCALL, VT_EMPTY, 2, { VT_DISPATCH, VT_BYREF | VT_VARIANT } };
+__declspec(selectany) _ATL_FUNC_INFO CHtmlView::BeforeNavigate2_Info = { CC_STDCALL, VT_EMPTY, 7, { VT_DISPATCH, VT_VARIANT | VT_BYREF, VT_VARIANT | VT_BYREF, VT_VARIANT | VT_BYREF, VT_VARIANT | VT_BYREF, VT_VARIANT | VT_BYREF, VT_BOOL | VT_BYREF } };
+__declspec(selectany) _ATL_FUNC_INFO CHtmlView::Navigate2Complete_Info = { CC_STDCALL, VT_EMPTY, 2,{ VT_DISPATCH, VT_BYREF | VT_VARIANT } };
 __declspec(selectany) _ATL_FUNC_INFO CHtmlView::TitleChange_Info = { CC_STDCALL, VT_EMPTY, 1, { VT_BSTR } };
 __declspec(selectany) _ATL_FUNC_INFO CHtmlView::StatusTextChange_Info = { CC_STDCALL, VT_EMPTY, 1, { VT_BSTR } };
 __declspec(selectany) _ATL_FUNC_INFO CHtmlView::CommandStateChange_Info = { CC_STDCALL, VT_EMPTY, 2, { VT_I4, VT_BOOL } };

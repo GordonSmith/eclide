@@ -23,6 +23,9 @@
 #include "DockablePropertyGridViews.h"
 
 #include "Workspace.h"
+#include <MiniApp.h>
+
+typedef std::map<unsigned int, IGlobalMiniAppAdapt> IDGlobalMiniAppMap;
 
 class CRepositoryFrame;
 class CWorkspaceFrame;
@@ -43,6 +46,7 @@ enum PERSIST_ITEM_TYPE
     PERSIST_ITEM_BUILDER,
     PERSIST_ITEM_ATTRIBUTE,
     PERSIST_ITEM_GRAPH,
+    PERSIST_ITEM_MINIAPP,
     PERSIST_ITEM_LAST
 };
 
@@ -178,6 +182,12 @@ public:
                 hWnd = OpenGraphMDI(m_frame, rep->CreateIWorkspaceItem(WORKSPACE_ITEM_GRAPH, m_props));
             }
             break;
+        case PERSIST_ITEM_MINIAPP:
+            {
+                CComPtr<IRepository> rep = AttachRepository();
+                hWnd = OpenGraphMDI(m_frame, rep->CreateIWorkspaceItem(WORKSPACE_ITEM_MINIAPP, m_props));
+            }
+            break;
         }
         if (!hWnd)
         {
@@ -258,6 +268,7 @@ enum RIBBON
     RIBBON_DEBUG,
     RIBBON_BROWSER,
     RIBBON_COMPARE,
+    RIBBON_MINIAPPS,
     RIBBON_LAST
 };
 
@@ -363,6 +374,7 @@ protected:  // control bar embedded members
     CMFCRibbonCategory* m_CategoryDebug;
     CMFCRibbonCategory* m_CategoryDebugAdvanced;
     CMFCRibbonCategory* m_CategoryCompare;
+    CMFCRibbonCategory* m_CategoryMiniApps;
 public:
     CMFCRibbonButton* m_graphRefresh;
     CMFCRibbonButton * m_buttMacroRecord;
@@ -402,6 +414,8 @@ public:
     bool m_closeOnTab;
     WORKSPACE m_workspaceMode;
     bool m_supressSyncTOC;
+
+    IDGlobalMiniAppMap m_globalMiniApps;
 
 // Generated message map functions
 protected:
@@ -474,6 +488,8 @@ protected:
     afx_msg BOOL OnViewDockedPane(UINT nID);
 
     afx_msg BOOL OnViewResetDockedToolbars(UINT nID);
+
+    afx_msg void OnMiniApps(UINT nID);
 
     afx_msg void OnApplicationLook(UINT id);
     afx_msg void OnUpdateApplicationLook(CCmdUI* pCmdUI);
@@ -554,6 +570,7 @@ public:
     void OpenBuilder(const CString & wuid, BuilderStartup startWith);
     void OpenBuilder(Dali::IWorkunit *wu, BuilderStartup startWith);
     void OpenBuilder(IAttribute * attribute);
+    void OpenMiniApp(UINT id);
     void SaveWorkunitsAs(CComPtr<Dali::IWorkunitVectorCom> wus);
     void SaveWorkunitAs(CComPtr<Dali::IWorkunit> wu);
     void SaveWorkunitAs(const std::_tstring & wuid);

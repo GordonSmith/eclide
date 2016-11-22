@@ -12,6 +12,7 @@
 #include "ModuleHelper.h"
 #include "DiskRepository.h"
 #include "EclCC.h"
+#include "MiniApp.h"
 #include <UtilFilesystem.h>
 
 void ClearAttributeTypeCache();
@@ -938,6 +939,7 @@ void ClearRepositorySingletons(bool childrenOnly)
         g_passwordCache.clear();
     }
     ClearEclCCSingletons();
+    ClearMiniAppSingletons();
 }
 
 //static void RollbackAsync(CString url, CString user, CString password, IAttributeVectorAdapt attributes, async_rollback_complete_slot_type s)

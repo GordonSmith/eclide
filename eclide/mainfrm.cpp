@@ -19,6 +19,7 @@
 //#include "InvokeSprayWizard.h"
 #include "AttrListDlg.h"
 #include <UtilFilesystem.h>
+#include "ChildMiniAppFrame.h"
 
 enum UM
 {
@@ -158,6 +159,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWndEx)
     ON_COMMAND_EX(ID_VIEW_SYNTAX, OnViewDockedPane)
     ON_UPDATE_COMMAND_UI(ID_VIEW_ERROR, OnUpdateViewDockedPane)
     ON_COMMAND_EX(ID_VIEW_ERROR, OnViewDockedPane)
+
+    ON_COMMAND_RANGE(ID_MINIAPPS, ID_MINIAPPS_LAST, OnMiniApps)
 
     ON_UPDATE_COMMAND_UI(ID_VIEW_DEBUGBREAKPOINTS, OnUpdateViewDockedPane)
     ON_COMMAND_EX(ID_VIEW_DEBUGBREAKPOINTS, OnViewDockedPane)
@@ -980,6 +983,18 @@ LRESULT CMainFrame::OnSelectRibbon(WPARAM wParam, LPARAM lParam)
             bRecalc = TRUE;
         }
         break;
+    case RIBBON_MINIAPPS:
+        /*
+        if (!m_CategoryMiniApps->IsVisible())
+        {
+            bRecalc = m_wndRibbonBar.HideAllContextCategories();
+            m_wndRibbonBar.ShowContextCategories(wParam);
+            if (!isHidden)
+                m_wndRibbonBar.ActivateContextCategory(wParam);
+            bRecalc = TRUE;
+        }
+        */
+        break;
     }
 
     if (bRecalc)
@@ -1240,6 +1255,21 @@ void CMainFrame::InitializeRibbon()
         pPanelResetDockedRight->Add(new CMFCRibbonButton(ID_VIEW_RESETDOCKEDWINDOWS_DEFAULT_RIGHT, _T("Default\nd")));
         pPanelResetDockedRight->Add(new CMFCRibbonButton(ID_VIEW_RESETDOCKEDWINDOWS_ALLPINNED_RIGHT, _T("All pinned\np")));
         pPanelResetDockedRight->Add(new CMFCRibbonButton(ID_VIEW_RESETDOCKEDWINDOWS_ALLUNPINNED_RIGHT, _T("All unpinned\nu")));
+    }
+
+    {//  Mini Apps Ribbon
+        m_CategoryMiniApps = m_wndRibbonBar.AddCategory(_T("&Mini Apps"), IDB_WRITESMALL, IDB_WRITELARGE);
+
+        CMFCRibbonPanel* pPanelDiferences = m_CategoryMiniApps->AddPanel(_T("Global"));
+
+        IGlobalMiniAppVector globalMiniApps;
+        GlobalMiniApps(globalMiniApps);
+        unsigned int id = ID_MINIAPPS;
+        for (IGlobalMiniAppVector::const_iterator itr = globalMiniApps.begin(); itr != globalMiniApps.end(); ++itr) {
+            pPanelDiferences->Add(new CMFCRibbonButton(id, itr->get()->Name()));
+            m_globalMiniApps[id] = itr->get();
+            ++id;
+        }
     }
 
     {//  Format Ribbon
@@ -2893,6 +2923,11 @@ void CMainFrame::OpenBuilder(IAttribute * attribute)
         ::OpenBuilderMDI(this, attribute, rep->CreateIWorkspaceItem(WORKSPACE_ITEM_BUILDER));
 }
 
+void CMainFrame::OpenMiniApp(UINT id) {
+    CComPtr<IRepository> rep = AttachRepository();
+    ::OpenMiniAppMDI(this, m_globalMiniApps[id], rep->CreateIWorkspaceItem(WORKSPACE_ITEM_MINIAPP));
+}
+
 void threadSaveAs(CMainFrame * self, StlLinked<Dali::IWorkunit> wu, CString filePath)
 {
     self->PostStatus((boost::_tformat(_T("Starting %1%.")) % wu->GetWuid()).str().c_str(), PANE_DEFAULT);
@@ -3823,6 +3858,12 @@ BOOL CMainFrame::OnViewResetDockedToolbars(UINT nID)
     SetWorkspaceMode(workspaceMode);
     return TRUE;
 }
+
+afx_msg void CMainFrame::OnMiniApps(UINT nID)
+{
+    OpenMiniApp(nID);
+}
+
 
 HWND CMainFrame::GetHwnd()
 {

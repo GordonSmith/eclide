@@ -145,9 +145,11 @@ void CWorkspaceNode::ItemExpanding()
 				newNode->operator ()(itr->get());
 			}
 			break;
-		case WORKSPACE_ITEM_GRAPH:
-			break;
-		}
+        case WORKSPACE_ITEM_GRAPH:
+            break;
+        case WORKSPACE_ITEM_MINIAPP:
+            break;
+        }
 	}
 }
 const TCHAR * CWorkspaceNode::GetID()

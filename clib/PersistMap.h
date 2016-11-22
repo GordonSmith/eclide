@@ -40,6 +40,7 @@
 #define PERSISTVAL_BUILDER _T("builder")
 #define PERSISTVAL_ATTRIBUTE _T("attribute")
 #define PERSISTVAL_GRAPH _T("graph")
+#define PERSISTVAL_MINIAPP _T("miniapp")
 //#define PERSISTVAL_RESULT _T("result")
 #define PERSISTVAL_HISTORY _T("history")
 #define PERSISTVAL_ECLWATCH _T("eclwatch")
