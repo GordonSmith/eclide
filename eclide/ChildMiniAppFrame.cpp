@@ -22,7 +22,12 @@ public:
         CComVariant url(*pvarUrl);
         CString csurl = url;
         if (csurl.Find(_T("eclide")) == 0) {
-            MessageBox(csurl, _T("Message from eclide"));
+            CStringArray params;
+            params.Add(_T("Key_1"));
+            CComVariant result;
+            CallJScript(_T("miniApp_get"), params, &result);
+            CString msg = _T("Mini App Action:  ") + csurl + _T("\nKey_1 = ") + result;
+            MessageBox(msg);
             *pbCancel = VARIANT_TRUE;
         }
     }
@@ -30,9 +35,10 @@ public:
     virtual void __stdcall OnEventDocumentComplete(IDispatch* pDisp, VARIANT* URL) {
         CHtmlView::OnEventDocumentComplete(pDisp, URL);
         CStringArray params;
-        params.Add(_T("eclide://someFunc?a=b&c=d"));
+        params.Add(_T("Key_1"));
+        params.Add(_T("Val_1"));
         CComVariant result;
-        CallJScript(_T("miniApp_init"), params, &result);
+        CallJScript(_T("miniApp_set"), params, &result);
     }
 };
 
