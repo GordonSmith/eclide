@@ -1359,7 +1359,7 @@ public:
 		m_comboFontSize.AddString(_T("78"));
 	}
 
-	std::vector<CString> m_elementTypes = { "general", "ecl", "esdl", "kel", "salt" };
+	std::vector<CString> m_elementTypes = { "general", "ecl", "esdl", "dud", "kel", "salt" };
 
 	int GetElementTypeCount()
 	{
