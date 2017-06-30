@@ -73,6 +73,26 @@ public:
         return false;
     }
 
+    std::_tstring ParseEsdlId(std::_tstring filename) const
+    {
+        std::_tstring esdlID;
+        boost::filesystem::path outFile = boost::filesystem::path(stringToPath(filename)).parent_path() / _T("log.txt");
+        std::_tstring outStr;
+        CUnicodeFile f;
+        if (f.Open(outFile))
+        {
+            f.Read(outStr);
+            f.Close();
+        }
+
+        std::string::size_type start_pos = 0;
+        if (std::string::npos !=  (start_pos = outStr.find(_T("Successfully published"), start_pos)))
+        {
+            esdlID = outStr.substr(start_pos + 23, -1).c_str();
+        }
+        return esdlID;
+     }
+
     virtual int PreProcess(PREPROCESS_TYPE action, const TCHAR * overrideEcl, IAttributeVector & attrs, IAttributeBookkeep & attrProcessed, Dali::CEclExceptionVector & errs) const
     {
         std::_tstring label = (boost::_tformat(_T("%1%.%2%")) % GetModuleQualifiedLabel(true) % GetLabel()).str();
@@ -160,6 +180,7 @@ public:
 
             CComPtr<IRepository> rep = AttachModFileRepository(outputFile.TempFileName(), false);
             outputFile.HandsOn();
+            std::_tstring esdlID = ParseEsdlId(outputFile.TempFileName());
 
             IModuleVector modules;
             rep->GetModules(_T(""), modules);
