@@ -8,10 +8,13 @@
 #include "logger.h"
 #include "EclCC.h"
 
+typedef std::pair<std::_tstring, std::_tstring> EsdlPair;
+
 class CAttributeBase : public clib::CLockableUnknown
 {
 protected:
     IRepository * m_repository;
+    EsdlPair m_esdlPair;
 
 public:
     virtual IAttributeType *GetType() const = 0;
@@ -73,9 +76,10 @@ public:
         return false;
     }
 
-    std::_tstring ParseEsdlId(std::_tstring filename) const
+    EsdlPair ParseEsdlId(std::_tstring filename) const
     {
-        std::_tstring esdlID;
+        EsdlPair esdlPair;
+
         boost::filesystem::path outFile = boost::filesystem::path(stringToPath(filename)).parent_path() / _T("log.txt");
         std::_tstring outStr;
         CUnicodeFile f;
@@ -88,9 +92,16 @@ public:
         std::string::size_type start_pos = 0;
         if (std::string::npos !=  (start_pos = outStr.find(_T("Successfully published"), start_pos)))
         {
-            esdlID = outStr.substr(start_pos + 23, -1).c_str();
+            std::_tstring esdlID = outStr.substr(start_pos + 23, -1).c_str();
+            if (std::string::npos != (start_pos = esdlID.find(_T("."), 0)))
+            {
+                std::_tstring definition = esdlID.substr(0, start_pos).c_str();
+                std::_tstring version = esdlID.substr(start_pos + 1).c_str();
+                esdlPair = std::make_pair(definition, version);
+            }
         }
-        return esdlID;
+
+        return esdlPair;
      }
 
     virtual int PreProcess(PREPROCESS_TYPE action, const TCHAR * overrideEcl, IAttributeVector & attrs, IAttributeBookkeep & attrProcessed, Dali::CEclExceptionVector & errs) const
@@ -180,7 +191,7 @@ public:
 
             CComPtr<IRepository> rep = AttachModFileRepository(outputFile.TempFileName(), false);
             outputFile.HandsOn();
-            std::_tstring esdlID = ParseEsdlId(outputFile.TempFileName());
+            EsdlPair esdlPair = ParseEsdlId(outputFile.TempFileName());
 
             IModuleVector modules;
             rep->GetModules(_T(""), modules);
