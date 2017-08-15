@@ -67,6 +67,11 @@ public:
         {
             return true;
         }
+        else if (CComPtr<IEclCC> eclcc = CreateIEclCC()) {
+            if (eclcc->LocatePlugin(batchFile, foundFolder)) {
+                return true;
+            }
+        }
         if (!boost::algorithm::iequals(batchFile, "ecl.bat")) {
             _DBGLOG(LEVEL_WARNING, (boost::format("Plugin not found - %1%") % batchFile).str().c_str());
         }
