@@ -1,4 +1,4 @@
-project( ZLIB )
+project( ZLIB CXX)
 
 set ( SRCS
 		${ZLIB_INCLUDE_DIR}/adler32.c
@@ -19,7 +19,7 @@ set ( SRCS
 		${ZLIB_INCLUDE_DIR}/contrib/minizip/zip.c
 		${ZLIB_INCLUDE_DIR}/zutil.c
 
-		${ZLIB_INCLUDE_DIR}/zlib.def
+		${ZLIB_INCLUDE_DIR}/contrib/vstudio/vc8/zlibvc.def
 	)
 
 include_directories (
@@ -27,6 +27,8 @@ include_directories (
 		${ZLIB_INCLUDE_DIR}/contrib/minizip
 	)
 
+add_definitions( -DZLIB_WINAPI )
+	
 add_library ( ZLIB SHARED
 		${SRCS}
 	)

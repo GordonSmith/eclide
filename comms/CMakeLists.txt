@@ -150,6 +150,8 @@ include_directories (
 	${GSOAP_INCLUDE_DIRS}
 	${GSOAP_INCLUDE_DIRS}/extras
 	${GSOAP_INCLUDE_DIRS}/mod_gsoap/gsoap_win/wininet
+
+	${ZLIB_INCLUDE_DIR}
 	)
 
 if (Boost_FOUND)
@@ -158,6 +160,9 @@ if (Boost_FOUND)
 endif (Boost_FOUND)
 
 add_definitions( -DWITH_SOAPDEFS_H )
+add_definitions( -DWITH_ZLIB)
+add_definitions( -DZLIB_WINAPI )
+
 ADD_MSVC_PRECOMPILED_HEADER("stdafx.h" "stdafx.cpp" SRCS)
 add_library ( COMMS SHARED 
 		${SRCS}
@@ -168,10 +173,12 @@ add_library ( COMMS SHARED
 	)
 
 add_dependencies ( COMMS
+		ZLIB
 		CLIB
 	)
 
 target_link_libraries( COMMS
+		ZLIB
 		CLIB
 		ECLLIB
 		msxml2.lib

@@ -112,24 +112,6 @@ set ( SRCS
 		${BUGTRAP_INCLUDE_DIR}/XmlReader.h
 		${BUGTRAP_INCLUDE_DIR}/XmlWriter.cpp
 		${BUGTRAP_INCLUDE_DIR}/XmlWriter.h
-
-		${ZLIB_INCLUDE_DIR}/adler32.c
-		${ZLIB_INCLUDE_DIR}/compress.c
-		${ZLIB_INCLUDE_DIR}/crc32.c
-		${ZLIB_INCLUDE_DIR}/deflate.c
-		${ZLIB_INCLUDE_DIR}/gzio.c
-		${ZLIB_INCLUDE_DIR}/infback.c
-		${ZLIB_INCLUDE_DIR}/inffast.c
-		${ZLIB_INCLUDE_DIR}/inflate.c
-		${ZLIB_INCLUDE_DIR}/inftrees.c
-		${ZLIB_INCLUDE_DIR}/contrib/minizip/ioapi.c
-		${ZLIB_INCLUDE_DIR}/contrib/minizip/iowin32.c
-		${ZLIB_INCLUDE_DIR}/contrib/minizip/mztools.c
-		${ZLIB_INCLUDE_DIR}/trees.c
-		${ZLIB_INCLUDE_DIR}/uncompr.c
-		${ZLIB_INCLUDE_DIR}/contrib/minizip/unzip.c
-		${ZLIB_INCLUDE_DIR}/contrib/minizip/zip.c
-		${ZLIB_INCLUDE_DIR}/zutil.c
 	)
 
 include_directories (
@@ -137,6 +119,8 @@ include_directories (
 	${ZLIB_INCLUDE_DIR}
 	${ZLIB_INCLUDE_DIR}/contrib/minizip
 	)
+
+add_definitions( -DZLIB_WINAPI )
 
 set( CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} /NODEFAULTLIB:zlibSD.lib" )
 set( CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /NODEFAULTLIB:zlibS.lib" )
@@ -146,7 +130,12 @@ add_library ( BUGTRAP SHARED
 		${SRCS}
 	)
 
+add_dependencies ( BUGTRAP
+		ZLIB
+	)
+
 target_link_libraries( BUGTRAP
+		ZLIB
 		ws2_32
 		comctl32
 		shlwapi
