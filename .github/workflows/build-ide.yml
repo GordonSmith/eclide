@@ -1,0 +1,48 @@
+name: Build Test ECL Watch
+
+on:
+  push:
+    branches:
+      - "master"
+      - "candidate-*"
+      - "!candidate-7.6.*"
+      - "!candidate-7.4.*"
+      - "!candidate-7.2.*"
+      - "!candidate-7.0.*"
+      - "!candidate-6.*"
+  pull_request:
+    branches:
+      - "master"
+      - "candidate-*"
+      - "!candidate-7.6.*"
+      - "!candidate-7.4.*"
+      - "!candidate-7.2.*"
+      - "!candidate-7.0.*"
+      - "!candidate-6.*"
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
+
+      - name: Setup MSBuild.exe
+        uses: warrenbuckley/Setup-MSBuild@v1
+
+      - name: Cache vcpkg
+        id: cache-vcpkg
+        uses: actions/cache@v1
+        with:
+          path: ./vcpkg
+          key: ${{ runner.os }}-vcpkg
+
+      - name: VCPKG Bootstrap
+        working-directory: ./vcpkg
+        run: bootstrap-vcpkg.bat
+
+      - name: VCPKG Install
+        working-directory: ./vcpkg
+        run: vcpkg.exe install wtl
