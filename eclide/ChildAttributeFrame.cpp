@@ -46,7 +46,7 @@ public:
 
     BOOL PreTranslateMessage(MSG* pMsg)
     {
-        if (::GetAsyncKeyState(VK_MENU) & 0x8000 && pMsg->wParam == '0')
+        if (::GetAsyncKeyState(VK_MENU) & 0x8000 && pMsg->wParam == '0' ||true)
         {
             if (::GetAsyncKeyState(VK_CONTROL) & 0x8000)
                 m_dlgview.m_view.FoldAll(true);
