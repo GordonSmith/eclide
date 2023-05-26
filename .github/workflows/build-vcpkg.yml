@@ -5,9 +5,6 @@ env:
   VCPKG_NUGET_REPOSITORY: "https://github.com/hpcc-systems/vcpkg"
 
 on:
-  push:
-    branches:
-      - "*"
   pull_request:
     branches:
       - "master"
