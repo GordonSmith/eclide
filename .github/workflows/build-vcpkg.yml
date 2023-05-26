@@ -100,11 +100,12 @@ jobs:
           ${{ matrix.sudo }} rm -rf "$VCPKG_INSTALLATION_ROOT"
 
       - name: Checkout eclide
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.5.2
         with:
           ref: ${{ needs.preamble.outputs.community_ref }}
           submodules: recursive
           path: ./eclide
+          fetch-depth: 0
 
       - name: "vcpkg Bootstrap"
         shell: "bash"
