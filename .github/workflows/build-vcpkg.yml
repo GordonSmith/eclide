@@ -22,7 +22,7 @@ on:
 
 jobs:
   preamble:
-    name: Check Skip
+    name: Preamble
     runs-on: ubuntu-22.04
     outputs:
       folder_platform: ${{ steps.vars.outputs.folder_platform }}
@@ -75,13 +75,13 @@ jobs:
             mono: ""
             sudo: ""
             cmake_config_options: '-G "Visual Studio 16 2019" -A Win32'
-            cmake_build_options: "--build . --config RelWithDebInfo --parallel $NUMBER_OF_PROCESSORS"
+            cmake_build_options: "--config RelWithDebInfo --parallel $NUMBER_OF_PROCESSORS"
             event_name: "schedule"
           - os: "windows-2022"
             mono: ""
             sudo: ""
             cmake_config_options: '-G "Visual Studio 17 2022" -A Win32'
-            cmake_build_options: "--build . --config RelWithDebInfo --parallel $NUMBER_OF_PROCESSORS"
+            cmake_build_options: "--config RelWithDebInfo --parallel $NUMBER_OF_PROCESSORS"
             event_name: "pull_request"
       fail-fast: false
 
