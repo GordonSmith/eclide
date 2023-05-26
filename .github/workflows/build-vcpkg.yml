@@ -124,11 +124,11 @@ jobs:
             -password "${{ secrets.GITHUB_TOKEN }}"
 
       - name: CMake Packages
-        shell: "cmd"
+        shell: "bash"
         run: |
-          mkdir build
-          cmake -S .\eclide -B .\build ${{ matrix.cmake_config_options }}
-          cmake --build .\build ${{ matrix.cmake_build_options }}
+          mkdir -p ./eclide/build
+          cmake -S ./eclide -B ./eclide/build ${{ matrix.cmake_config_options }}
+          cmake --build ./eclide/build ${{ matrix.cmake_build_options }}
 
       - name: Upload error logs
         if: ${{ failure() || cancelled() }}
