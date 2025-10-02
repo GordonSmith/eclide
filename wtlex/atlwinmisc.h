@@ -949,7 +949,7 @@ public:
    BOOL SetProperty(LPCTSTR pstrName, long lValue)
    {
       ATLASSERT(::IsWindow(m_hWnd));
-      return ::SetProp(m_hWnd, pstrName, (HANDLE) lValue);
+      return ::SetProp(m_hWnd, pstrName, (HANDLE)(LONG_PTR)lValue);
    }
    BOOL SetProperty(LPCTSTR pstrName, LPCVOID pValue)
    {
@@ -959,7 +959,7 @@ public:
    void GetProperty(LPCTSTR pstrName, long& lValue) const
    {
       ATLASSERT(::IsWindow(m_hWnd));
-      lValue = (long) ::GetProp(m_hWnd, pstrName);
+      lValue = (long)(LONG_PTR)::GetProp(m_hWnd, pstrName);
    }
    void GetProperty(LPCTSTR pstrName, LPVOID& pValue) const
    {

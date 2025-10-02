@@ -649,6 +649,16 @@ BOOL CGridCtrl::OnEraseBkgnd(CDC* /*pDC*/)
     return TRUE;    // Don't erase the background.
 }
 
+#ifdef _WIN64
+void CGridCtrl::OnTimer(UINT_PTR nIDEvent)
+#else
+void CGridCtrl::OnTimer(UINT nIDEvent)
+#endif
+{
+    // Default implementation - pass to base class
+    CWnd::OnTimer(nIDEvent);
+}
+
 // Custom background erasure. This gets called from within the OnDraw function,
 // since we will (most likely) be using a memory DC to stop flicker. If we just
 // erase the background normally through OnEraseBkgnd, and didn't fill the memDC's

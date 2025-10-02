@@ -4,7 +4,13 @@ find_package(boost_thread CONFIG REQUIRED)
 find_package(boost_serialization CONFIG REQUIRED)
 find_package(boost_filesystem CONFIG REQUIRED)
 find_path(GSOAP_DIR stdsoap2.cpp HINTS ${VCPKG_ROOT_DIR}/share/gsoap)
-find_path(GSOAP_BIN wsdl2h.exe HINTS ${VCPKG_ROOT_DIR}/share/gsoap/bin/win32)
+
+# Detect gSOAP binary path based on architecture
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    find_path(GSOAP_BIN wsdl2h.exe HINTS ${VCPKG_ROOT_DIR}/share/gsoap/bin/win64 ${VCPKG_ROOT_DIR}/share/gsoap/bin/win32)
+else()
+    find_path(GSOAP_BIN wsdl2h.exe HINTS ${VCPKG_ROOT_DIR}/share/gsoap/bin/win32)
+endif()
 
 SET (GEN_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/6_4_0/soapC.cpp

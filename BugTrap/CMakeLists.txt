@@ -149,6 +149,11 @@ ADD_LIBRARY ( BUGTRAP SHARED
     ${SRCS}
 )
 
+# Fix for x64 Debug builds - suppress _malloca macro redefinition warning
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    target_compile_options(BUGTRAP PRIVATE /wd4005)
+endif()
+
 TARGET_LINK_LIBRARIES( BUGTRAP PRIVATE
     ws2_32
     comctl32

@@ -53,6 +53,14 @@ SET(CMAKE_INSTALL_MFC_LIBRARIES TRUE)
 # Compiler Flags  ---
 ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS -DUNICODE -D_UNICODE)
 
+# Add x64-specific compiler flags
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    # Suppress pointer truncation warnings for x64 builds in legacy code
+    if(MSVC)
+        add_compile_options(/wd4312 /wd4311)
+    endif()
+endif()
+
 MACRO(ADD_MSVC_PRECOMPILED_HEADER PrecompiledHeader PrecompiledSource SourcesVar)
     IF(MSVC)
         GET_FILENAME_COMPONENT(PrecompiledBasename ${PrecompiledHeader} NAME_WE)
@@ -216,7 +224,7 @@ SET(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL "ON")
 SET(CPACK_NSIS_URL_INFO_ABOUT "http:\\\\\\\\hpccsystems.com")
 SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\eclide.exe")
 SET(CPACK_NSIS_CONTACT ${CPACK_PACKAGE_CONTACT})
-IF("${FB_PLATFORM_ARCH_NAME}" EQUAL "x86_64")
+IF(${ARCH64BIT} EQUAL 1)
     SET (CPACK_NSIS_DISPLAY_NAME "ECL IDE x64")
 ELSE ()
     SET (CPACK_NSIS_DISPLAY_NAME "ECL IDE")
