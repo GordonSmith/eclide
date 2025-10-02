@@ -761,7 +761,11 @@ void CMainFrame::OnClose()
     CMDIFrameWndEx::OnClose();
 }
 
+#ifdef _WIN64
+void CMainFrame::OnTimer(UINT_PTR nID)
+#else
 void CMainFrame::OnTimer(UINT nID)
+#endif
 {
     switch (nID)
     {
