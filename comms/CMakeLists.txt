@@ -38,6 +38,13 @@ ADD_CUSTOM_COMMAND(
     COMMAND ${GSOAP_BIN}/wsdl2h.exe -I${GSOAP_DIR} -I./hpcc -o Services.h Ws_Account.wsdl WsAttributes.wsdl WsDfu.wsdl WsSMC.wsdl WsTopology.wsdl WsWorkunits.wsdl
     COMMAND ${GSOAP_BIN}/soapcpp2.exe -C -x -i -I${GSOAP_DIR}/import Services.h
     COMMAND ${GSOAP_BIN}/soapcpp2.exe -C -x -i -I${GSOAP_DIR}/import -penv ./hpcc/env.h
+    COMMAND powershell -Command "(Get-Content soapC.cpp) -replace 'register ', '' | Set-Content soapC.cpp"
+    COMMAND powershell -Command "(Get-Content soapws_USCOREaccountServiceSoapProxy.cpp) -replace 'register ', '' | Set-Content soapws_USCOREaccountServiceSoapProxy.cpp"
+    COMMAND powershell -Command "(Get-Content soapWsAttributesServiceSoapProxy.cpp) -replace 'register ', '' | Set-Content soapWsAttributesServiceSoapProxy.cpp"
+    COMMAND powershell -Command "(Get-Content soapWsDfuServiceSoapProxy.cpp) -replace 'register ', '' | Set-Content soapWsDfuServiceSoapProxy.cpp"
+    COMMAND powershell -Command "(Get-Content soapWsSMCServiceSoapProxy.cpp) -replace 'register ', '' | Set-Content soapWsSMCServiceSoapProxy.cpp"
+    COMMAND powershell -Command "(Get-Content soapWsTopologyServiceSoapProxy.cpp) -replace 'register ', '' | Set-Content soapWsTopologyServiceSoapProxy.cpp"
+    COMMAND powershell -Command "(Get-Content soapWsWorkunitsServiceSoapProxy.cpp) -replace 'register ', '' | Set-Content soapWsWorkunitsServiceSoapProxy.cpp"
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/6_4_0
 )
 
